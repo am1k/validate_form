@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title></title>
+    <link rel="stylesheet" href="css/style.css">
+    <!--<script src="js/main.js"></script>-->
+</head>
+<body>
+
+<form id="form" novalidate>
+<ul>
+    <li>
+        <label for="name">Name</label>
+        <input type="text" id="name" required data-pattern="required">
+        <span class="hide">Incorrect name</span>
+    </li>
+    <li>
+        <label for="surname">Surname</label>
+        <input type="text" id="surname">
+        <span class="hide">Incorrect surname</span>
+    </li>
+    <li>
+        <label for="email">Email</label>
+        <input type="email" id="email">
+        <span class="hide">Incorrect email</span>
+    </li>
+    <li>
+        <label for="telephone">Telephone</label>
+        <input type="tel" id="telephone">
+        <span class="hide">Incorrect telephone</span>
+    </li>
+    <li>
+        <select id="select-value">
+            <option value="all" selected disabled="disabled">Select Value</option>
+            <option>Value 1</option>
+            <option>Value 2</option>
+            <option>Value 3</option>
+        </select>
+        <span class="hide">Choose select</span>
+    </li>
+</ul>
+</form>
+<button id="submit">Submit</button>
+
+</body>
+<script src="js/main.js"></script>
+</html>
