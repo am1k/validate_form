@@ -63,27 +63,31 @@ ValidateForm.prototype = {
         this.checkRequired();
     },
     checkRequired: function(){
-        var rule;
+        var isRequired,
+            rule;
         Array.prototype.forEach.call(this.els, function(el){
-        rule = this.options.rules[el.getAttribute('data-pattern')];
-        if(el.getAttribute('required') != null || el.value.length){
+            isRequired = el.getAttribute('required') != null || el.value.length;
+            rule = this.options.rules[el.getAttribute('data-pattern')];
+
             if(typeof rule === 'function'){
-                this.setState(rule(el), el);
-            }else{
-                this.setState(!rule.test(el.value), el);
+                this.setState(rule(el), isRequired, el);
+            }else {
+                this.setState(!rule.test(el.value), isRequired, el);
             }
-        }
-        if(el.getAttribute('required') === null){
-            console.log(1);
-        }
         }.bind(this))
     },
-    setState: function(err, el){
-        if(err){
-            el.classList.add(this.options["errorClass"]);
-        }else{
-            el.classList.remove(this.options["errorClass"]);
+    setState: function(err, isRequired, el){
+        if(!isRequired){
+            el.classList.remove(this.options.errorClass);
         }
+        if(isRequired){
+            if(err){
+                el.classList.add(this.options.errorClass);
+            }else{
+                el.classList.remove(this.options.errorClass);
+            }
+        }
+
     }
 };
 new ValidateForm(document.querySelector('#form'), {
