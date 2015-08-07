@@ -39,9 +39,15 @@ ValidateForm.prototype = {
     },
     setListener: function (){
         var self = this;
-        this.form.addEventListener('click', function(e) {
+        this.form.addEventListener('click',function(e){
             if(e.srcElement.tagName.toLocaleLowerCase() === 'button') {
-                self.checkRequired();
+                self.checkValidate();
+                self.checkForm(e);
+            }
+        });
+        this.form.addEventListener('keyup', function(e) {
+            if(e.srcElement.tagName.toLocaleLowerCase() === 'input') {
+                self.checkValidate();
                 self.checkForm(e);
             }
         })
@@ -52,19 +58,24 @@ ValidateForm.prototype = {
             e.preventDefault();
         }
     },
+    checkValidate: function(){
+        this.els = this.form.querySelectorAll('[data-pattern]');
+        this.checkRequired();
+    },
     checkRequired: function(){
         var rule;
-        this.els = this.form.querySelectorAll('[data-pattern]');
         Array.prototype.forEach.call(this.els, function(el){
-            rule = this.options.rules[el.getAttribute('data-pattern')];
-            if(el.getAttribute('required') != null || el.value.length){
-                if(typeof rule === 'function'){
-                    this.setState(rule(el), el);
-                }else{
-                    this.setState(!rule.test(el.value), el);
-                }
+        rule = this.options.rules[el.getAttribute('data-pattern')];
+        if(el.getAttribute('required') != null || el.value.length){
+            if(typeof rule === 'function'){
+                this.setState(rule(el), el);
+            }else{
+                this.setState(!rule.test(el.value), el);
             }
-
+        }
+        if(el.getAttribute('required') === null){
+            console.log(1);
+        }
         }.bind(this))
     },
     setState: function(err, el){
