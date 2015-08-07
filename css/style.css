@@ -23,6 +23,6 @@ span {
 .hide {
     display: none;
 }
-.error + span {
+.error + span, .fail + span {
     display: inline-block;
 }
