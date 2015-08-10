@@ -66,7 +66,6 @@ ValidateForm.prototype = {
         this.form.addEventListener('click',function(e){
             if(e.srcElement.tagName.toLocaleLowerCase() === 'button') {
                 self.validate();
-                console.log(self.isValid);
                 if(!self.isValid){
                     e.preventDefault();
                 }
@@ -81,17 +80,15 @@ ValidateForm.prototype = {
     },
 
     checkField: function(el){
-        if(el.value.length > 0 && el.selectedIndex != 0){
             var isRequired,
                 rule;
-            isRequired = el.getAttribute('required') != null || el.value.length;
+            isRequired = el.getAttribute('required') != null || el.value.length || el.selectedIndex;
             rule = this.options.rules[el.getAttribute('data-pattern')];
             if(typeof rule === 'function'){
                 this.setState(rule(el), isRequired, el);
             }else {
                 this.setState(!rule.test(el.value), isRequired, el);
             }
-        }
     },
 
     setState: function(err, isRequired, el){
@@ -100,6 +97,7 @@ ValidateForm.prototype = {
         }
         if(isRequired){
             if(err){
+                this.isValid = false;
                 el.classList.add(this.options.errorClass);
             }else{
                 el.classList.remove(this.options.errorClass);
