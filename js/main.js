@@ -35,47 +35,65 @@ function ValidateForm(form,options){
 ValidateForm.prototype = {
 
     init: function() {
+        this.findElements();
         this.setListener();
     },
+    findElements: function(){
+        this.els = this.form.querySelectorAll('[data-pattern]');
+    },
+    debounce: function(func, wait, immediate) {
+        var timeout;
+        return function() {
+            var context = this, args = arguments;
+            var later = function() {
+                timeout = null;
+                if (!immediate) func.apply(context, args);
+            };
+            var callNow = immediate && !timeout;
+            clearTimeout(timeout);
+            timeout = setTimeout(later, wait);
+            if (callNow) func.apply(context, args);
+        };
+    },
+
     setListener: function (){
         var self = this;
+        this.keyupHandler = this.debounce(function(e) {
+            if(e.srcElement.tagName.toLocaleLowerCase() === 'input') {
+                self.checkField(e.srcElement);
+            }
+        }, 500);
         this.form.addEventListener('click',function(e){
             if(e.srcElement.tagName.toLocaleLowerCase() === 'button') {
-                self.checkValidate();
-                self.checkForm(e);
+                self.validate();
+                console.log(self.isValid);
+                if(!self.isValid){
+                    e.preventDefault();
+                }
             }
         });
-        this.form.addEventListener('keyup', function(e) {
-            if(e.srcElement.tagName.toLocaleLowerCase() === 'input') {
-                self.checkValidate();
-                self.checkForm(e);
-            }
-        })
+        this.form.addEventListener('keyup', this.keyupHandler);
     },
-    checkForm: function(e){
-        this.childElements = this.form.getElementsByClassName(this.options["errorClass"]);
-        if(this.childElements.length > 0 ) {
-            e.preventDefault();
-        }
+
+    validate: function(){
+        this.isValid = true;
+        Array.prototype.forEach.call(this.els, this.checkField.bind(this));
     },
-    checkValidate: function(){
-        this.els = this.form.querySelectorAll('[data-pattern]');
-        this.checkRequired();
-    },
-    checkRequired: function(){
-        var isRequired,
-            rule;
-        Array.prototype.forEach.call(this.els, function(el){
+
+    checkField: function(el){
+        if(el.value.length > 0 && el.selectedIndex != 0){
+            var isRequired,
+                rule;
             isRequired = el.getAttribute('required') != null || el.value.length;
             rule = this.options.rules[el.getAttribute('data-pattern')];
-
             if(typeof rule === 'function'){
                 this.setState(rule(el), isRequired, el);
             }else {
                 this.setState(!rule.test(el.value), isRequired, el);
             }
-        }.bind(this))
+        }
     },
+
     setState: function(err, isRequired, el){
         if(!isRequired){
             el.classList.remove(this.options.errorClass);
