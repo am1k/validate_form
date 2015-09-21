@@ -4,47 +4,9 @@
     <meta charset="UTF-8">
     <title></title>
     <link rel="stylesheet" href="css/style.css">
-    <!--<script src="js/main.js"></script>-->
 </head>
 <body>
-
-<form id="form" novalidate>
-<ul>
-    <li>
-        <label for="name">Name</label>
-        <input type="text" id="name" required data-pattern="required">
-        <span class="hide">Incorrect name</span>
-    </li>
-    <li>
-        <label for="surname">Surname</label>
-        <input type="text" id="surname" data-pattern="required">
-        <span class="hide">Incorrect surname</span>
-    </li>
-    <li>
-        <label for="email">Email</label>
-        <input type="email" id="email" data-pattern="email">
-        <span class="hide">Incorrect email</span>
-    </li>
-    <li>
-        <label for="telephone">Telephone</label>
-        <input type="tel" id="telephone" required data-pattern="telephone">
-        <span class="hide">Incorrect telephone</span>
-    </li>
-    <li>
-        <select id="select-value" required data-pattern="select">
-            <option value="0" selected  disabled="disabled">Select Value</option>
-            <option>Value 1</option>
-            <option>Value 2</option>
-            <option>Value 3</option>
-        </select>
-        <span class="hide">Choose select</span>
-    </li>
-    <li>
-        <button id="submit">Submit</button>
-    </li>
-</ul>
-</form>
-
+<form class="form" novalidate></form>
 </body>
-<script src="js/main.js"></script>
+<script data-main="js/app.js" src="js/require.js"></script>
 </html>
